@@ -29,16 +29,20 @@ public class CloudController {
         userService.logout(authToken);
     }
 
-    @PostMapping("/file")
-    public void uploadFile(@RequestHeader("auth-token") String authToken, @ModelAttribute File file,
-                           @RequestParam String filename) throws IOException {
-        fileService.uploadFile(authToken, filename, file);
-    }
+//    @PostMapping("/file")
+//    public void uploadFile(@RequestHeader("auth-token") String authToken, @ModelAttribute File file,
+//                           @RequestParam String filename) throws IOException {
+//        fileService.uploadFile(authToken, filename, file);
+//    }
 
     @PostMapping("/file")
     public void uploadFile(@RequestHeader("auth-token") String authToken, @RequestPart MultipartFile file,
                            @RequestParam String filename) throws IOException {
         fileService.uploadFile(authToken, filename, file);
+    }
+    @DeleteMapping("/file")
+    public void deleteFile(@RequestHeader("auth-token") String authToken, @RequestParam("filename") String filename) {
+        fileService.deleteFile(authToken, filename);
     }
 
 }
