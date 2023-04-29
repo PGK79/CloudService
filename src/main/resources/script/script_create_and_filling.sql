@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS cloud_database.files
 (
     id int4 primary key auto_increment,
     content longblob not null,
-    size int not null ,
-    name varchar(50) not null unique ,
+    size int not null,
+    name varchar(100) not null unique ,
     user_id int4,
     FOREIGN KEY (user_id) references users(id)
 );
