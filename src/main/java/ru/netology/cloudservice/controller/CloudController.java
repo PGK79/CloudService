@@ -51,11 +51,12 @@ public class CloudController {
 
     @PutMapping("/file")
     public void putFile(@RequestHeader("auth-token") String authToken, @RequestParam("filename") String filename,
-                        @RequestBody FileName newFileName) {
+                        @RequestBody FileData newFileName) {
         fileService.renameFile(authToken, filename, newFileName.getFilename());
     }
+
     @GetMapping("/list")
-    public List<FileDTO> getList(@RequestHeader("auth-token") String authToken, @RequestParam("limit") Integer limit) {
+    public List<FileData> getList(@RequestHeader("auth-token") String authToken, @RequestParam("limit") Integer limit) {
         return fileService.getList(authToken, limit);
     }
 }
