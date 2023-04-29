@@ -2,6 +2,7 @@ package ru.netology.cloudservice.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import ru.netology.cloudservice.model.AuthorizeData;
 import ru.netology.cloudservice.model.Login;
@@ -22,6 +23,12 @@ public class CloudController {
     public Login login(@RequestBody AuthorizeData authorizeData) {
         return userService.login(authorizeData.getLogin(), authorizeData.getPassword());
     }
+
+    @PostMapping("/logout")
+    public void logout(@RequestHeader("auth-token") String authToken) {
+        userService.logout(authToken);
+    }
+
 }
 
 
