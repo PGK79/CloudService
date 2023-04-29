@@ -30,4 +30,14 @@ public class UserService {
         }
     }
 
+    public void logout(String authToken) {
+        Optional<User> userResult = userRepository.findUserByAuthToken(authToken.split(" ")[1]);
+        if (userResult.isPresent()) {
+            User user = userResult.get();
+            user.setAuthToken(null);
+            userRepository.saveAndFlush(user);
+        } else {
+            throw new TokenException("Токен ошибочен");
+        }
+    }
 }
