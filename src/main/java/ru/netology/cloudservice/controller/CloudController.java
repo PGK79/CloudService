@@ -44,6 +44,16 @@ public class CloudController {
     public void deleteFile(@RequestHeader("auth-token") String authToken, @RequestParam("filename") String filename) {
         fileService.deleteFile(authToken, filename);
     }
+    @GetMapping("/file")
+    public byte[] getFile(@RequestHeader("auth-token") String authToken, @RequestParam String filename) {
+        return fileService.getFile(authToken, filename);
+    }
+
+    @PutMapping("/file")
+    public void putFile(@RequestHeader("auth-token") String authToken, @RequestParam("filename") String filename,
+                        @RequestBody FileName newFileName) {
+        fileService.renameFile(authToken, filename, newFileName.getFilename());
+    }
 
 }
 
