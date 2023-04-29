@@ -1,13 +1,13 @@
 package ru.netology.cloudservice.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
-import ru.netology.cloudservice.model.AuthorizeData;
-import ru.netology.cloudservice.model.Login;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.netology.cloudservice.model.*;
 import ru.netology.cloudservice.service.FileService;
 import ru.netology.cloudservice.service.UserService;
+
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 public class CloudController {
@@ -27,6 +27,18 @@ public class CloudController {
     @PostMapping("/logout")
     public void logout(@RequestHeader("auth-token") String authToken) {
         userService.logout(authToken);
+    }
+
+    @PostMapping("/file")
+    public void uploadFile(@RequestHeader("auth-token") String authToken, @ModelAttribute File file,
+                           @RequestParam String filename) throws IOException {
+        fileService.uploadFile(authToken, filename, file);
+    }
+
+    @PostMapping("/file")
+    public void uploadFile(@RequestHeader("auth-token") String authToken, @RequestPart MultipartFile file,
+                           @RequestParam String filename) throws IOException {
+        fileService.uploadFile(authToken, filename, file);
     }
 
 }
