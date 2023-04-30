@@ -1,6 +1,7 @@
 package ru.netology.cloudservice.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Table(name = "users")
 public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,35 +28,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<FileEntity> fileEntities;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-    public String getLogin() {
-        return login;
-    }
-    public void setLogin(String login) {
+    public User(String login, String password, String authToken, List<FileEntity> fileEntities) {
         this.login = login;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
         this.password = password;
-    }
-    public String getAuthToken() {
-        return authToken;
-    }
-    public void setAuthToken(String authToken) {
         this.authToken = authToken;
-    }
-    public List<FileEntity> getFileEntities() {
-        return fileEntities;
-    }
-    public void setFileEntities(List<FileEntity> fileEntities) {
         this.fileEntities = fileEntities;
     }
 }
