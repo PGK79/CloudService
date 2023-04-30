@@ -25,7 +25,7 @@ public class User {
     private String authToken;
 
     @OneToMany(mappedBy = "user")
-    private List<File> files;
+    private List<FileEntity> fileEntities;
 
     public long getId() {
         return id;
@@ -52,10 +52,10 @@ public class User {
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
     }
-    public List<File> getFiles() {
-        return files;
+    public List<FileEntity> getFileEntities() {
+        return fileEntities;
     }
-    public void setFiles(List<File> files) {
-        this.files = files;
+    public void setFileEntities(List<FileEntity> fileEntities) {
+        this.fileEntities = fileEntities;
     }
 }
