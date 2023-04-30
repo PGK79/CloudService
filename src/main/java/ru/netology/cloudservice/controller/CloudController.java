@@ -1,8 +1,9 @@
 package ru.netology.cloudservice.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.netology.cloudservice.model.AuthorizeData;
-import ru.netology.cloudservice.model.File;
 import ru.netology.cloudservice.model.FileData;
 import ru.netology.cloudservice.model.Login;
 import ru.netology.cloudservice.service.FileService;
@@ -12,14 +13,10 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 public class CloudController {
     private final UserService userService;
     private final FileService fileService;
-
-    public CloudController(UserService userService, FileService fileService) {
-        this.userService = userService;
-        this.fileService = fileService;
-    }
 
     @PostMapping("/login")
     public Login login(@RequestBody AuthorizeData authorizeData) {
@@ -32,8 +29,9 @@ public class CloudController {
     }
 
     @PostMapping("/file")
-    public void uploadFile(@RequestHeader("auth-token") String authToken, @ModelAttribute File file,
+    public void uploadFile(@RequestHeader("auth-token") String authToken, @RequestPart MultipartFile file,
                            @RequestParam String filename) throws IOException {
+        System.out.println("SIZE = " + file.getSize());
         fileService.uploadFile(authToken, filename, file);
     }
 
@@ -41,6 +39,7 @@ public class CloudController {
     public void deleteFile(@RequestHeader("auth-token") String authToken, @RequestParam("filename") String filename) {
         fileService.deleteFile(authToken, filename);
     }
+
     @GetMapping("/file")
     public byte[] getFile(@RequestHeader("auth-token") String authToken, @RequestParam String filename) {
         return fileService.getFile(authToken, filename);
@@ -57,7 +56,3 @@ public class CloudController {
         return fileService.getList(authToken, limit);
     }
 }
-
-
-
-
