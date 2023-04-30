@@ -14,19 +14,21 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@EnableWebMvc
-public class MultipartConfig implements WebMvcConfigurer {
+//@EnableWebMvc
+public class MultipartConfig {
+//public class MultipartConfig implements WebMvcConfigurer {
 
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(new ObjectMapper());
-        converter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON,
-                MediaType.MULTIPART_FORM_DATA));
-
-        converters.add(converter);
-    }
+//    @Override
+//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//
+//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+//        converter.setObjectMapper(new ObjectMapper());
+//        converter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON,
+//                MediaType.MULTIPART_FORM_DATA));
+//        converter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON));
+//
+//        converters.add(converter);
+//    }
 
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
