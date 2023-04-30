@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
-public final class File implements Serializable {
-    private MultipartFile file;
+public final class File{
     private String hash;
+    private MultipartFile file;
 }
