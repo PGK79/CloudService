@@ -9,7 +9,6 @@ import ru.netology.cloudservice.entity.User;
 import ru.netology.cloudservice.exception.InputDataException;
 import ru.netology.cloudservice.exception.RepositoryException;
 import ru.netology.cloudservice.exception.TokenException;
-import ru.netology.cloudservice.model.File;
 import ru.netology.cloudservice.model.FileData;
 import ru.netology.cloudservice.repository.FileRepository;
 import ru.netology.cloudservice.repository.UserRepository;
@@ -75,6 +74,7 @@ public class FileService {
             throw new RepositoryException("Не возможно вернуть список файлов");
         }
     }
+
     public User getUserByToken(String token) {
         Optional<User> userResult = userRepository.findUserByAuthToken(token.split(" ")[1]);
         if (userResult.isPresent()) {
@@ -83,7 +83,7 @@ public class FileService {
     }
 
     public void checkToken(String token) {
-        if (token.equals(null)) {
+        if (token == null) {
             throw new TokenException("Токен ошибочный");
         }
     }

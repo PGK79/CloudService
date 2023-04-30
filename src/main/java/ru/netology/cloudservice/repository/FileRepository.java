@@ -14,6 +14,4 @@ public interface FileRepository extends JpaRepository<FileEntity, Long> {
     Optional<FileEntity> findFileByNameAndUser(String filename, User user);
 
     List<FileEntity> findAllFilesByUser(User user, Pageable pageable);
-
-
 }

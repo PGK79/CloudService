@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class FileData{
     private String filename;
     private long size;
-
 }
