@@ -3,6 +3,7 @@ package ru.netology.cloudservice.service;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.netology.cloudservice.entity.FileEntity;
 import ru.netology.cloudservice.entity.User;
 import ru.netology.cloudservice.exception.InputDataException;
@@ -24,14 +25,17 @@ public class FileService {
     private final FileRepository fileRepository;
     private final UserRepository userRepository;
 
-    public void uploadFile(String authToken, String filename, File file) throws IOException {
+    public void uploadFile(String authToken, String filename, MultipartFile file) throws IOException {
         checkToken(authToken);
         if (file == null || filename.isEmpty()) {
             throw new InputDataException("Ошибка при передаче файла");
         }
-        FileEntity inputFileEntity = new FileEntity(file.getFile().getBytes(), file.getFile().getSize(), filename,
-                getUserByToken(authToken));
-        saveFileInRepository(inputFileEntity);
+        FileEntity fileEntity = new FileEntity();
+        fileEntity.setUser(getUserByToken(authToken));
+        fileEntity.setSize(file.getSize());
+        fileEntity.setName(filename);
+        fileEntity.setContent(file.getBytes());
+        saveFileInRepository(fileEntity);
     }
 
     public void deleteFile(String authToken, String filename) {
