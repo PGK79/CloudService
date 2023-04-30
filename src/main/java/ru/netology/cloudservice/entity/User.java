@@ -1,6 +1,5 @@
 package ru.netology.cloudservice.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,9 +25,9 @@ public class User {
     private String authToken;
 
     @OneToMany(mappedBy = "user")
-    private List<FileEntity> fileEntities;
+    private List<File> fileEntities;
 
-    public User(String login, String password, String authToken, List<FileEntity> fileEntities) {
+    public User(String login, String password, String authToken, List<File> fileEntities) {
         this.login = login;
         this.password = password;
         this.authToken = authToken;

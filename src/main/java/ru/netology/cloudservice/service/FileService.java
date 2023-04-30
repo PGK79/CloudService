@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.netology.cloudservice.entity.FileEntity;
+import ru.netology.cloudservice.entity.File;
 import ru.netology.cloudservice.entity.User;
 import ru.netology.cloudservice.exception.InputDataException;
 import ru.netology.cloudservice.exception.RepositoryException;
@@ -29,7 +29,7 @@ public class FileService {
         if (file == null || filename.isEmpty()) {
             throw new InputDataException("Ошибка при передаче файла");
         }
-        FileEntity fileEntity = new FileEntity();
+        File fileEntity = new File();
         fileEntity.setUser(getUserByToken(authToken));
         fileEntity.setSize(file.getSize());
         fileEntity.setName(filename);
@@ -52,9 +52,9 @@ public class FileService {
     public void renameFile(String authToken, String filename, String name) {
         checkToken(authToken);
         checkFile(filename);
-        FileEntity fileEntity = giveFileFromRepository(filename, authToken);
-        fileEntity.setName(name);
-        saveFileInRepository(fileEntity);
+        File file = giveFileFromRepository(filename, authToken);
+        file.setName(name);
+        saveFileInRepository(file);
     }
 
     public List<FileData> getList(String authToken, Integer limit){
@@ -63,10 +63,10 @@ public class FileService {
             throw new InputDataException("Значение лимита ошибочно");
         }
         try {
-        List<FileEntity> list = fileRepository.findAllFilesByUser(getUserByToken(authToken), PageRequest.of(0, limit));
+        List<File> list = fileRepository.findAllFilesByUser(getUserByToken(authToken), PageRequest.of(0, limit));
         List<FileData> fileDataList = new ArrayList<>();
-        for(FileEntity fileEntity : list){
-            FileData fileData = new FileData(fileEntity.getName(), fileEntity.getSize());
+        for(File file : list){
+            FileData fileData = new FileData(file.getName(), file.getSize());
             fileDataList.add(fileData);
         }
         return fileDataList;
@@ -94,8 +94,8 @@ public class FileService {
         }
     }
 
-    public FileEntity giveFileFromRepository(String filename, String authToken) {
-        Optional<FileEntity> resultFile = fileRepository.findFileByNameAndUser(filename, getUserByToken(authToken));
+    public File giveFileFromRepository(String filename, String authToken) {
+        Optional<File> resultFile = fileRepository.findFileByNameAndUser(filename, getUserByToken(authToken));
         if (resultFile.isPresent()) {
             return resultFile.get();
         } else {
@@ -103,9 +103,9 @@ public class FileService {
         }
     }
 
-    public void saveFileInRepository(FileEntity fileEntity){
+    public void saveFileInRepository(File file){
         try {
-            fileRepository.saveAndFlush(fileEntity);
+            fileRepository.saveAndFlush(file);
         } catch (RuntimeException e) {
             throw new RepositoryException("Ошибка сохранения файла в репозиторий");
         }
