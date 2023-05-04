@@ -25,9 +25,9 @@ public class File {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private UserEntity user;
 
-    public File(byte[] content, long size, String name, User user) {
+    public File(byte[] content, long size, String name, UserEntity user) {
         this.content = content;
         this.size = size;
         this.name = name;

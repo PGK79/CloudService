@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.netology.cloudservice.entity.File;
-import ru.netology.cloudservice.entity.User;
+import ru.netology.cloudservice.entity.UserEntity;
 import ru.netology.cloudservice.exception.InputDataException;
 import ru.netology.cloudservice.exception.RepositoryException;
 import ru.netology.cloudservice.exception.TokenException;
@@ -75,8 +75,8 @@ public class FileService {
         }
     }
 
-    public User getUserByToken(String token) {
-        Optional<User> userResult = userRepository.findUserByAuthToken(token.split(" ")[1]);
+    public UserEntity getUserByToken(String token) {
+        Optional<UserEntity> userResult = userRepository.findUserByAuthToken(token.split(" ")[1]);
         if (userResult.isPresent()) {
             return userResult.get();
         } else throw new TokenException("Пользователь по переданному токену не найден");
