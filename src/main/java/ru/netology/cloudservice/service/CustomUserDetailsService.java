@@ -28,6 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserDetails user = User.builder()
                 .username(userEntity.getLogin())
                 .password(userEntity.getPassword())
+                .roles("")
                 .build();
         return user;
     }
