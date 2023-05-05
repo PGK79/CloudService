@@ -20,7 +20,7 @@ public class CloudController {
 
     @PostMapping("/login")
     public Login login(@RequestBody AuthorizeData authorizeData) {
-        return userService.login(authorizeData.getLogin(), authorizeData.getPassword());
+        return userService.login(authorizeData);
     }
 
     @PostMapping("/logout")
