@@ -19,10 +19,9 @@ CREATE TABLE IF NOT EXISTS cloud_database.files
 );
 
 INSERT INTO cloud_database.users (login, password)
-VALUES ('ivan@mail.com', '{bcrypt}$2a$12$3PLC5VYw1Wp.pViZGJ2hH.84VTUgKrUYpPcBTw86bdntlkSFOE0Sm'),
-       ('test@mail.com', 'test'),
-       ('petr@mail.com', '{bcrypt}$2a$12$w3PKKFfQtamHJ.xoOLCTC.vx7AUU3H83mFkMyWAxLp4q1GOI3Hs4C'),
-       ('sidor@mail.com', '{bcrypt}$2a$12$3NBsUqcl6mPdhrYhP5X31.LME.E12y0/53bQ1xamcqqiKdKWfa5.q'),
-       ('olga@mail.com', '{bcrypt}$2a$12$cYk5ypHtpNYXTlzZhihXauTpxVeDhIBXasvw/VwYfY41TNhXhUCH2'),
-       ('john@mail.com', '{bcrypt}$2a$12$gzbkRcR3iNTJZkN8mmP10e9.a1iJOW4LbNtQ0JlCvP6QnyfZxkqFu'),
-       ('irina@mail.com', '{bcrypt}$2a$12$YRbpqOLPp5pZQ1K.sA6wIu0O016JpyG16gXtxOW9hLTQCUADEIhdS');
+VALUES ('ivan@mail.com', 'HwKc2ObFsoZMSymKxMdJIg=='),
+       ('petr@mail.com', 'oaoTOm3hRjS4FcaUyomOIw=='),
+       ('sidor@mail.com', 'XHa+fQP8G1ra5beDirdNTA=='),
+       ('olga@mail.com', 'u7Ipgw3H0Uk4Fsmuw/urLQ=='),
+       ('john@mail.com', 'CXwcLfcj/EVW059a7cwD3w=='),
+       ('irina@mail.com', 'u2ec22BM9U318BMSgqKWHA==');
