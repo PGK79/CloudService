@@ -2,9 +2,11 @@ package ru.netology.cloudservice.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.netology.cloudservice.cryptograph.Crypter;
 import ru.netology.cloudservice.entity.UserEntity;
 import ru.netology.cloudservice.exception.AuthorizeException;
 import ru.netology.cloudservice.exception.TokenException;
+import ru.netology.cloudservice.model.AuthorizeData;
 import ru.netology.cloudservice.model.Login;
 import ru.netology.cloudservice.repository.UserRepository;
 
@@ -16,8 +18,9 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
 
-    public Login login(String login, String password) {
-        Optional<UserEntity> userResult = userRepository.findByLoginAndPassword(login, password);
+    public Login login(AuthorizeData authorizeData) {
+        Optional<UserEntity> userResult = userRepository.findByLoginAndPassword(authorizeData.getLogin(),
+                Crypter.encrypt(authorizeData.getPassword()));
         String token;
         if (userResult.isPresent()) {
             UserEntity user = userResult.get();
