@@ -57,19 +57,19 @@ public class FileService {
         saveFileInRepository(file);
     }
 
-    public List<FileData> getList(String authToken, Integer limit){
+    public List<FileData> getList(String authToken, Integer limit) {
         checkToken(authToken);
-        if (limit < 0){
+        if (limit < 0) {
             throw new InputDataException("Значение лимита ошибочно");
         }
         try {
-        List<File> list = fileRepository.findAllFilesByUser(getUserByToken(authToken), PageRequest.of(0, limit));
-        List<FileData> fileDataList = new ArrayList<>();
-        for(File file : list){
-            FileData fileData = new FileData(file.getName(), file.getSize());
-            fileDataList.add(fileData);
-        }
-        return fileDataList;
+            List<File> list = fileRepository.findAllFilesByUser(getUserByToken(authToken), PageRequest.of(0, limit));
+            List<FileData> fileDataList = new ArrayList<>();
+            for (File file : list) {
+                FileData fileData = new FileData(file.getName(), file.getSize());
+                fileDataList.add(fileData);
+            }
+            return fileDataList;
         } catch (RuntimeException e) {
             throw new RepositoryException("Не возможно вернуть список файлов");
         }
@@ -103,7 +103,7 @@ public class FileService {
         }
     }
 
-    public void saveFileInRepository(File file){
+    public void saveFileInRepository(File file) {
         try {
             fileRepository.saveAndFlush(file);
         } catch (RuntimeException e) {
