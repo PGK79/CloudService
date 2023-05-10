@@ -1,4 +1,4 @@
-package ru.netology.cloudservice.ServiceTest;
+package ru.netology.cloudservice;
 
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
