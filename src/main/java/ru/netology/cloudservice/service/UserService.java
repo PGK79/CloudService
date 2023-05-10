@@ -21,13 +21,11 @@ public class UserService {
     public Login login(AuthorizeData authorizeData) {
         Optional<User> userResult = userRepository.findByLoginAndPassword(authorizeData.getLogin(),
                 Crypter.encrypt(authorizeData.getPassword()));
-        String token;
         if (userResult.isPresent()) {
             User user = userResult.get();
-            token = UUID.randomUUID().toString();
-            user.setAuthToken(token);
+            user.setAuthToken(UUID.randomUUID().toString());
             userRepository.saveAndFlush(user);
-            return new Login(token);
+            return new Login(user.getAuthToken());
         } else {
             throw new AuthorizeException("Логин и/или пароль не верны");
         }
