@@ -24,7 +24,7 @@ public class FileService {
     private final FileRepository fileRepository;
     private final UserRepository userRepository;
 
-    public void uploadFile(String authToken, String filename, MultipartFile file) throws IOException {
+    public boolean uploadFile(String authToken, String filename, MultipartFile file) throws IOException {
         checkToken(authToken);
         if (file == null || filename.isEmpty()) {
             throw new InputDataException("Ошибка при передаче файла");
@@ -35,12 +35,14 @@ public class FileService {
         fileEntity.setName(filename);
         fileEntity.setContent(file.getBytes());
         saveFileInRepository(fileEntity);
+        return true;
     }
 
-    public void deleteFile(String authToken, String filename) {
+    public boolean deleteFile(String authToken, String filename) {
         checkToken(authToken);
         checkFile(filename);
         fileRepository.delete(giveFileFromRepository(filename, authToken));
+        return true;
     }
 
     public byte[] getFile(String authToken, String filename) {
@@ -49,12 +51,13 @@ public class FileService {
         return giveFileFromRepository(filename, authToken).getContent();
     }
 
-    public void renameFile(String authToken, String filename, String name) {
+    public boolean renameFile(String authToken, String filename, String name) {
         checkToken(authToken);
         checkFile(filename);
         File file = giveFileFromRepository(filename, authToken);
         file.setName(name);
         saveFileInRepository(file);
+        return true;
     }
 
     public List<FileData> getList(String authToken, Integer limit) {
@@ -62,9 +65,10 @@ public class FileService {
         if (limit < 0) {
             throw new InputDataException("Значение лимита ошибочно");
         }
+
+        List<File> list = fileRepository.findAllFilesByUser(getUserByToken(authToken), PageRequest.of(0, limit));
+        List<FileData> fileDataList = new ArrayList<>();
         try {
-            List<File> list = fileRepository.findAllFilesByUser(getUserByToken(authToken), PageRequest.of(0, limit));
-            List<FileData> fileDataList = new ArrayList<>();
             for (File file : list) {
                 FileData fileData = new FileData(file.getName(), file.getSize());
                 fileDataList.add(fileData);
@@ -103,11 +107,12 @@ public class FileService {
         }
     }
 
-    public void saveFileInRepository(File file) {
+    public boolean saveFileInRepository(File file) {
         try {
             fileRepository.saveAndFlush(file);
         } catch (RuntimeException e) {
             throw new RepositoryException("Ошибка сохранения файла в репозиторий");
         }
+        return true;
     }
 }
