@@ -19,7 +19,7 @@ public class UserServiceTest {
     private final String password = "ivan";
     private final String authToken = "token";
     private final String cryptPassword = Crypter.encrypt(password);
-    private Optional<User> optionalUser = Optional.of(new User(login, cryptPassword, authToken, null));
+    private Optional<User> optionalUser = Optional.of(new User(login, cryptPassword, authToken));
 
     @BeforeAll
     public static void startedAll() {
@@ -48,9 +48,7 @@ public class UserServiceTest {
     public void testLoginOk() {
         // given:
         AuthorizeData authorizeData = new AuthorizeData(login, password);
-
         Mockito.when(userRepository.findByLoginAndPassword(login, cryptPassword)).thenReturn(optionalUser);
-
         Login expected = new Login(authToken);
 
         // when:
@@ -63,7 +61,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void loginAuthorizeExceptionTest() {
+    public void testLoginAuthorizeException() {
         // given:
         login = "ivan@mail.ru";
         optionalUser = Optional.empty();
@@ -74,14 +72,18 @@ public class UserServiceTest {
     }
 
     @Test
-    public void logoutTest() {
-        Optional<User> optionalUser = Optional.of(new User(login, cryptPassword, authToken, null));
-        String bearerToken = "Bearer Token";
+    public void testLogout() {
+        // given:
+        Optional<User> optionalUser = Optional.of(new User(login, cryptPassword, authToken));
+        String bearerToken = "Bearer " + authToken;
         Mockito.when(userRepository.findUserByAuthToken(bearerToken.split(" ")[1])).thenReturn(optionalUser);
+        User expected = Optional.of(new User(login, cryptPassword, null)).get();
+
+        // when:
         sut.logout(bearerToken);
-        Mockito.verify(userRepository, Mockito.times(1))
-                .findUserByAuthToken(bearerToken.split(" ")[1]);
-        Mockito.verify(userRepository, Mockito.times(1))
-                .saveAndFlush(new User(login, cryptPassword, null, null));
+        User actual = optionalUser.get();
+
+        // then:
+        Assertions.assertEquals(expected, actual);
     }
 }
