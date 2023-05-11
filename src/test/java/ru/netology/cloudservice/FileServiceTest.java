@@ -267,11 +267,6 @@ public class FileServiceTest {
         Assertions.assertThrows(RepositoryException.class, () -> sut.getList(bearerToken, limit));
     }
 
-
-
-
-
-
     @Test
     public void testGiveFileFromRepository() {
         // given:

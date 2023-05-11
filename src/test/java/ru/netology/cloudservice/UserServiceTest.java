@@ -24,7 +24,6 @@ public class UserServiceTest {
     @BeforeAll
     public static void startedAll() {
         System.out.println("Начало тестов пользовательского сервиса");
-
     }
 
     @BeforeEach
