@@ -31,7 +31,6 @@ public class CloudController {
     @PostMapping("/file")
     public void uploadFile(@RequestHeader("auth-token") String authToken, @RequestPart MultipartFile file,
                            @RequestParam String filename) throws IOException {
-        System.out.println("SIZE = " + file.getSize());
         fileService.uploadFile(authToken, filename, file);
     }
 
