@@ -1,4 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS cloud_database;
+CREATE DATABASE IF NOT EXISTS cloud_database;
 
 CREATE TABLE IF NOT EXISTS cloud_database.users
 (
