@@ -15,9 +15,3 @@ services:
     environment:
       MYSQL_USER: root
       MYSQL_PASSWORD: mysql
-
-  frontend:
-    image: 'cloudfrontend:1.0'
-    build: "./"
-    ports:
-      - "8080:8080"
