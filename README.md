@@ -18,19 +18,16 @@
 * Docker образ серверная часть:  **cloudbackend:1.0**
 * Docker образ базы данных: **mysql:latest**
 ######
+
+#### При необходимости отдельной сборки образа Backend, создание и запуск контейнера
 * Сборка Docker образа backend приложения:
 **docker build -t cloudbackend:1.0 .**
 * Создание и запуск Docker контейнера backend приложения:  
 **docker run -itd --name backend -p 8081:8081 cloudbackend:1.0**
-* Запуск проекта с использованием docker-compose: 
- 
-  **docker-compose up**
-  #### Важно ####
-  * образ backend приложения должен быть собран
-  * образ mysql загрузить: **docker pull mysql**
+* запуске приложения в IDEA **spring.sql.init.mode=always** после первого запуска заменить на **spring.sql.init.mode=embedded**
 
 ######
-* Варианты логина и пароля:
+#### Варианты логина и пароля:
   * ivan@mail.com / ivan
   * petr@mail.com / petr
   * sidor@mail.com / sidor
@@ -77,5 +74,7 @@
 1. Для запуска приложения необходимо выполнить команду **npm run serve** в корневой папке проекта
 1. Окно командной строки для работы сервера не закрывать
 
+#### Запуск backend части с использованием docker-compose:
+*docker-compose up*
 
 
