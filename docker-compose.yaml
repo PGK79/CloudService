@@ -1,17 +1,19 @@
-version: '3'
+version: '3.1'
 
 services:
-  backend:
-    image: 'cloudbackend:1.0'
-    build: "./"
-    ports:
-      - "8081:8081"
-
-  database:
+  db:
     image: mysql
-    container_name: mysql
     ports:
       - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
     environment:
-      MYSQL_USER: root
-      MYSQL_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: 'mysql'
+
+  backend:
+    image: cloudbackend:1.0
+    build: ./
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
