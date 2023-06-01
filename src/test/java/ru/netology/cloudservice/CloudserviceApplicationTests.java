@@ -12,10 +12,15 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import ru.netology.cloudservice.cryptograph.Crypter;
 import ru.netology.cloudservice.entity.File;
 import ru.netology.cloudservice.entity.User;
+import ru.netology.cloudservice.exception.AuthorizeException;
+import ru.netology.cloudservice.model.AuthorizeData;
+import ru.netology.cloudservice.model.Login;
 import ru.netology.cloudservice.repository.FileRepository;
 import ru.netology.cloudservice.repository.UserRepository;
+import ru.netology.cloudservice.service.UserService;
 
 import java.awt.print.Pageable;
 import java.util.List;
@@ -25,11 +30,13 @@ import java.util.Map;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudserviceApplicationTests {
     private static final Network network = Network.newNetwork();
+    private String login = "ivan@mail.com";
+    private final String password = "ivan";
     private final String token = "token";
     private final String filename = "filename";
-    private final User user = new User("test@mail.com", "test", token);
-    private final File fileOne = new File("file content".getBytes(),12L, filename, user);
-    private final File fileTwo = new File("file content two".getBytes(),16L, "new" + filename, user);
+    private final User user = new User(login, password, token);
+    private final File fileOne = new File("file content".getBytes(), 12L, filename, user);
+    private final File fileTwo = new File("file content two".getBytes(), 16L, "new" + filename, user);
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -40,11 +47,16 @@ class CloudserviceApplicationTests {
     @Autowired
     FileRepository fileRepository;
 
+    @Autowired
+    UserService userService;
+
+
     @BeforeEach
     void setUp() {
         userRepository.deleteAll();
         fileRepository.deleteAll();
     }
+
     @Container
     public static MySQLContainer<?> mysql = new MySQLContainer<>("mysql")
             .withNetwork(network)
@@ -70,8 +82,9 @@ class CloudserviceApplicationTests {
     void contextServer() {
         Assertions.assertFalse(backendApp.isRunning());
     }
+
     @Test
-    void testGetUserByLoginAndPassword(){
+    void testGetUserByLoginAndPassword() {
         //given
         userRepository.save(user);
         User expected = user;
@@ -79,12 +92,12 @@ class CloudserviceApplicationTests {
         // when:
         User actual = userRepository.findByLoginAndPassword("test@mail.com", "test").get();
 
-        // when:
-        Assertions.assertEquals(expected,actual);
+        // then:
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    void testGetUserByAuthToken(){
+    void testGetUserByAuthToken() {
         //given
         userRepository.save(user);
         User expected = user;
@@ -92,35 +105,65 @@ class CloudserviceApplicationTests {
         // when:
         User actual = userRepository.findUserByAuthToken("token").get();
 
-        // when:
-        Assertions.assertEquals(expected,actual);
+        // then:
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    void testGetFileByNameAndUser(){
+    void testGetFileByNameAndUser() {
         //given
         userRepository.save(user);
         fileRepository.save(fileOne);
         File expected = fileOne;
 
         // when:
-        File actual = fileRepository.findFileByNameAndUser(filename,user).get();
+        File actual = fileRepository.findFileByNameAndUser(filename, user).get();
 
-        // when:
-        Assertions.assertEquals(expected,actual);
+        // then:
+        Assertions.assertEquals(expected, actual);
     }
+
     @Test
-    void testGetFile(){
+    void testGetFile() {
         //given
         userRepository.save(user);
         fileRepository.save(fileOne);
         fileRepository.save(fileTwo);
-        List<File> expected = List.of(fileOne,fileTwo);
+        List<File> expected = List.of(fileOne, fileTwo);
 
         // when:
-        List<File> actual = fileRepository.findAllFilesByUser(user,PageRequest.of(0, 2));
+        List<File> actual = fileRepository.findAllFilesByUser(user, PageRequest.of(0, 2));
+
+        // then:
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void testUserServiceLoginOK() {
+        //given
+        AuthorizeData authorizeData = new AuthorizeData(login, password);
+        User userWithoutToken = new User(login, Crypter.encrypt(password));
+        userRepository.save(userWithoutToken);
+        Login expected = new Login(token);
 
         // when:
-        Assertions.assertEquals(expected,actual);
+        Login actual = userService.login(authorizeData);
+
+        // then:
+        Assertions.assertSame(expected.getClass(), actual.getClass());
+        Assertions.assertNotNull(actual.getAuthToken());
+        Assertions.assertNotEquals(0, actual.getAuthToken().length());
+    }
+
+    @Test
+    void testUserServiceLoginAuthorizeException() {
+        //given
+        User userWithoutToken = new User(login, Crypter.encrypt(password));
+        login = "petr@mail.com";
+        userRepository.save(userWithoutToken);
+        Login expected = new Login(token);
+
+        // then:
+        Assertions.assertThrows(AuthorizeException.class, () -> userService.login(new AuthorizeData(login, password)));
     }
 }
