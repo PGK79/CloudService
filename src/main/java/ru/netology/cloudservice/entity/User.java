@@ -28,4 +28,16 @@ public class User {
         this.password = password;
         this.authToken = authToken;
     }
+
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
+
+    public User(long id, String login, String password, String authToken) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.authToken = authToken;
+    }
 }

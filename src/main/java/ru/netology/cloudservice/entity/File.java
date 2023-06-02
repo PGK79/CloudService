@@ -33,4 +33,12 @@ public class File {
         this.name = name;
         this.user = user;
     }
+
+    public File(long id, byte[] content, long size, String name, User user) {
+        this.id = id;
+        this.content = content;
+        this.size = size;
+        this.name = name;
+        this.user = user;
+    }
 }
