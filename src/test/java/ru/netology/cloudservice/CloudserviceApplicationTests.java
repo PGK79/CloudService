@@ -1,7 +1,6 @@
 package ru.netology.cloudservice;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,13 +8,9 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.containers.Network;
-import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.MountableFile;
 import ru.netology.cloudservice.cryptograph.Crypter;
 import ru.netology.cloudservice.entity.File;
 import ru.netology.cloudservice.entity.User;
@@ -26,10 +21,7 @@ import ru.netology.cloudservice.repository.FileRepository;
 import ru.netology.cloudservice.repository.UserRepository;
 import ru.netology.cloudservice.service.UserService;
 
-import javax.sql.DataSource;
-import java.awt.print.Pageable;
 import java.util.List;
-import java.util.Map;
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -69,14 +61,6 @@ class CloudserviceApplicationTests {
         registry.add("spring.datasource.password", database::getPassword);
     }
 
-
-
-//    @BeforeEach
-//    void setUp() {
-//        userRepository.deleteAll();
-//        fileRepository.deleteAll();
-//    }
-
     @Test
     void contextDatabase() {
         Assertions.assertTrue(database.isRunning());
@@ -110,7 +94,6 @@ class CloudserviceApplicationTests {
     @Test
     void testGetFileByNameAndUser() {
         //given
-        //fileRepository.save(fileOne);
         File expected = fileOne;
 
         // when:
@@ -123,7 +106,6 @@ class CloudserviceApplicationTests {
     @Test
     void testGetFile() {
         //given
-        //fileRepository.save(fileTwo);
         List<File> expected = List.of(fileOne, fileTwo);
 
         // when:
@@ -136,10 +118,8 @@ class CloudserviceApplicationTests {
     @Test
     void testUserServiceLoginOK() {
         //given
-        AuthorizeData authorizeData = new AuthorizeData(login, password);
-        User userWithoutToken = new User(login, Crypter.encrypt(password));
-        userRepository.save(userWithoutToken);
-        Login expected = new Login(token);
+        AuthorizeData authorizeData = new AuthorizeData("petr@mail.com", "petr");
+        Login expected = new Login("token2");
 
         // when:
         Login actual = userService.login(authorizeData);
