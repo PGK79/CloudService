@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -152,7 +151,7 @@ class FileServiceTest {
     }
 
     @Test
-    public void testFileServiceGetFileInputDataException(){
+    public void testFileServiceGetFileInputDataException() {
         // given:
         filename = "";
 
@@ -161,7 +160,7 @@ class FileServiceTest {
     }
 
     @Test
-    public void testFileServiceGetFileRepositoryException(){
+    public void testFileServiceGetFileRepositoryException() {
         // given:
         filename = "anotherFilename";
 
@@ -175,17 +174,19 @@ class FileServiceTest {
         boolean expected = true;
 
         // when:
-        boolean actual = fileService.renameFile(bearerToken,"renamed","newname");
+        boolean actual = fileService.renameFile(bearerToken, "renamed", "newname");
 
         // then:
         Assertions.assertEquals(expected, actual);
     }
+
     @Test
     public void testRenameFileTokenException() {
         // then:
         Assertions.assertThrows(TokenException.class, () -> fileService.renameFile(invalidToken, filename,
                 "newFileName"));
     }
+
     @Test
     public void testRenameFileInputDataException() {
         // given:
@@ -202,6 +203,7 @@ class FileServiceTest {
         Assertions.assertThrows(RepositoryException.class, () -> fileService.renameFile(bearerToken, filename,
                 "newFileName"));
     }
+
     @Test
     public void testGetList() {
         // given:
@@ -215,5 +217,22 @@ class FileServiceTest {
         Assertions.assertEquals(expected, actual);
     }
 
+    @Test
+    public void testGetListTokenException() {
+        // given:
+        Integer limit = 1;
+
+        // then:
+        Assertions.assertThrows(TokenException.class, () -> fileService.getList(invalidToken, limit));
+    }
+
+    @Test
+    public void testGetListInputDataException() {
+        // given:
+        Integer limit = -1;
+
+        // then:
+        Assertions.assertThrows(InputDataException.class, () -> fileService.getList(bearerToken, limit));
+    }
 }
 
