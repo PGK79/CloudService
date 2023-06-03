@@ -15,10 +15,12 @@ CREATE TABLE files
     user_id int4,
     FOREIGN KEY (user_id) references users (id)
 );
-INSERT INTO users (login, password,auth_token)
+INSERT INTO users (login, password, auth_token)
 VALUES ('ivan@mail.com', 'ivan', 'token'),
-       ('petr@mail.com', 'petr','token2');
+       ('petr@mail.com', 'petr', 'token2');
 
 INSERT INTO files (content, size, name, user_id)
 VALUE ('file content', 12, 'filename', 1),
-      ('file content two', 16, 'newfilename', 1);
+      ('new file content', 16, 'newfilename', 1),
+      ('removable file content', 25, 'removable', 1),
+      ('renamed file content', 12, 'renamed', 1);
