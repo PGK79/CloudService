@@ -17,7 +17,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.netology.cloudservice.entity.File;
 import ru.netology.cloudservice.entity.User;
 import ru.netology.cloudservice.exception.AuthorizeException;
+import ru.netology.cloudservice.exception.InputDataException;
 import ru.netology.cloudservice.exception.RepositoryException;
+import ru.netology.cloudservice.exception.TokenException;
 import ru.netology.cloudservice.model.AuthorizeData;
 import ru.netology.cloudservice.model.Login;
 import ru.netology.cloudservice.repository.FileRepository;
@@ -32,7 +34,7 @@ import java.util.Optional;
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudserviceApplicationTests {
-    private final String filename = "filename";
+    private String filename = "filename";
     private String login = "ivan@mail.com";
     private final String password = "ivan";
     private final String token = "token";
@@ -171,10 +173,39 @@ class CloudserviceApplicationTests {
         Assertions.assertTrue(fileService.uploadFile(bearerToken, filename + " zero", multipartFile));
     }
 
+    @Test
+    void testUploadFileTokenException(){
+        String bearerToken = "Bearer " + " anotherToken";
+        MultipartFile multipartFile = Mockito.mock(MultipartFile.class);
+
+        // then:
+        Assertions.assertThrows(TokenException.class, () -> fileService.uploadFile(bearerToken, filename, multipartFile));
+    }
 
     @Test
+    void testUploadFileInputDataExceptionMultipartFileIsNull(){
+        // given
+        String bearerToken = "Bearer " + token;
+
+        // then:
+        Assertions.assertThrows(InputDataException.class, () -> fileService.uploadFile(bearerToken, filename, null));
+    }
+
+    @Test
+    void testUploadFileInputDataExceptionFilenameIsEmpty(){
+        // given
+        String bearerToken = "Bearer " + token;
+        filename = "";
+        MultipartFile multipartFile = new MockMultipartFile("file", filename, "text/plain",
+                "file content".getBytes());
+
+        // then:
+        Assertions.assertThrows(InputDataException.class, () -> fileService.uploadFile(bearerToken, filename, multipartFile));
+
+    }
+    @Test
     void testUploadFileRepositoryException() throws IOException {
-        // given// given:
+        // given
         String bearerToken = "Bearer " + token;
         MultipartFile multipartFile = Mockito.mock(MultipartFile.class);
 
