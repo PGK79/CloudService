@@ -229,13 +229,12 @@ public class FileServiceTest {
 
         Mockito.when(userRepository.findUserByAuthToken(authToken)).thenReturn(optionalUser);
         Mockito.when(fileRepository.findAllFilesByUser(user, PageRequest.of(0, limit))).thenReturn(files);
-
-        // when:
         List<FileData> expected = List.of(fileData);
 
-        // then:
+        // when:
         List<FileData> actual = sut.getList(bearerToken, limit);
 
+        // then:
         Assertions.assertEquals(expected, actual);
     }
 
